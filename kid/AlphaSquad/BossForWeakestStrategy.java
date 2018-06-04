@@ -1,9 +1,11 @@
 package kid.AlphaSquad;
 
+import kid.AlphaSquad.Messaging.CommandType;
 import kid.AlphaSquad.Strategies.WeakestEnemyStrategy;
 import kid.Colors;
 import kid.Data.MovementProfile;
 import kid.Data.Robot.EnemyData;
+import kid.Data.Robot.TeammateData;
 import kid.Managers.DataManager;
 import kid.Managers.MovementManager;
 import kid.Managers.StatisticsManager;
@@ -238,10 +240,17 @@ public class BossForWeakestStrategy extends TeamRobot implements WeakestEnemyStr
     public void getEnemy(DataManager data) {
         EnemyData weakestEnemy = data.getWeakestEnemey();
         System.out.println("Weakest enemy: "+weakestEnemy.getName()+" energy: "+weakestEnemy.getEnergy());
+
+        sendCommand(CommandType.attack, weakestEnemy);
     }
 
     @Override
-    public void sendCommand() {
-
+    public void sendCommand(CommandType commandType, EnemyData enemyData) {
+        TeammateData[] teammates = Data.getTeammates();
+        for (TeammateData teammate:teammates)
+        {
+            System.out.println(teammate.getName()+" should "+commandType+" "+enemyData.getName());
+        }
     }
+
 }

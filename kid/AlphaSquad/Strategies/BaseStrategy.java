@@ -1,5 +1,7 @@
 package kid.AlphaSquad.Strategies;
 
+import kid.AlphaSquad.Messaging.CommandType;
+import kid.Data.Robot.EnemyData;
 import kid.Managers.DataManager;
 
 public interface BaseStrategy {
@@ -12,5 +14,5 @@ public interface BaseStrategy {
     /**
      * send command to teammates, so that they target the robot based on used strategy.
      */
-    void sendCommand();
+    void sendCommand(CommandType commandType, EnemyData enemyData);
 }

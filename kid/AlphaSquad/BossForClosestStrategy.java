@@ -1,9 +1,11 @@
 package kid.AlphaSquad;
 
+import kid.AlphaSquad.Messaging.CommandType;
 import kid.AlphaSquad.Strategies.ClosestEnemyStrategy;
 import kid.Colors;
 import kid.Data.MovementProfile;
 import kid.Data.Robot.EnemyData;
+import kid.Data.Robot.TeammateData;
 import kid.Managers.DataManager;
 import kid.Managers.MovementManager;
 import kid.Managers.StatisticsManager;
@@ -238,10 +240,16 @@ public class BossForClosestStrategy extends TeamRobot implements ClosestEnemyStr
     public void getEnemy(DataManager data) {
         EnemyData closestEnemy = data.getColsestEnemy();
         System.out.println("closest enemy: "+closestEnemy.getName());
+
+        sendCommand(CommandType.attack, closestEnemy);
     }
 
     @Override
-    public void sendCommand() {
-
+    public void sendCommand(CommandType commandType, EnemyData enemyData) {
+        TeammateData[] teammates = Data.getTeammates();
+        for (TeammateData teammate:teammates)
+        {
+            System.out.println(teammate.getName()+" should "+commandType+" "+enemyData.getName());
+        }
     }
 }
