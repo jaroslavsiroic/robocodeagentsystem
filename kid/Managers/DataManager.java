@@ -1,22 +1,31 @@
 package kid.Managers;
 
-import java.awt.*;
-import java.io.*;
-import java.security.*;
-import java.util.*;
-import java.util.List;
-import java.util.zip.*;
-
-import kid.*;
-import kid.Communication.*;
-import kid.Data.*;
-import kid.Data.Robot.*;
-import kid.Data.Virtual.*;
-import kid.Targeting.*;
+import kid.Colors;
+import kid.Communication.Data;
+import kid.Communication.Me;
+import kid.Data.MyRobotsInfo;
+import kid.Data.Robot.EnemyData;
+import kid.Data.Robot.RobotData;
+import kid.Data.Robot.TeammateData;
+import kid.Data.Virtual.VirtualBullet;
+import kid.Data.Virtual.VirtualGun;
+import kid.Debuger;
+import kid.RobocodeGraphicsDrawer;
+import kid.Segmentation.Segmentars.Segmentar;
+import kid.Targeting.Targeting;
+import kid.Utils;
 import robocode.*;
 import robocode.Event;
 import robocode.Robot;
-import kid.Segmentation.Segmentars.Segmentar;
+
+import java.awt.*;
+import java.io.*;
+import java.security.AccessControlException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * <p>
@@ -271,14 +280,12 @@ public class DataManager {
                             + i.getRobotFrontHeading()), Utils.getY(i.getY(), SRE.getDistance(), SRE.getBearing()
                             + i.getRobotFrontHeading()), SRE.getEnergy(), SRE.getHeading(), SRE.getVelocity(), SRE
                             .getTime());
-                    System.out.println("Updated enemy "+ SRE.getName());
                 } else {
                     if (!updateEnemyDataFromFile(SRE)) {
                         EnemyData[EnemyCount] = new EnemyData(SRE.getName(), Utils.getX(i.getX(), SRE.getDistance(),
                                 SRE.getBearing() + i.getRobotFrontHeading()), Utils.getY(i.getY(), SRE.getDistance(),
                                 SRE.getBearing() + i.getRobotFrontHeading()), SRE.getEnergy(), SRE.getHeading(), SRE
                                 .getVelocity(), SRE.getTime());
-                        System.out.println("Spotted new enemy "+ SRE.getName());
                     }
                     if (isGuessFactor) {
                         EnemyData[EnemyCount].addGuessFactor(MyRobot, Segmentars);
@@ -640,6 +647,33 @@ public class DataManager {
             Time_SmallestRiskEnemy = i.getTime();
         }
         return SmallestRiskEnemy;
+    }
+
+    public EnemyData getWeakestEnemey()
+    {
+        EnemyData weakestEnemy = null;
+
+        if(EnemyCount > 0)
+        {
+            //System.out.println("enemy count: "+EnemyCount);
+
+            weakestEnemy = EnemyData[0];
+            double weakestEnergy = EnemyData[0].getEnergy();
+
+            for (int b = 0; b < EnemyCount; b++)
+            {
+                EnemyData bot = EnemyData[b];
+                if (bot.isDead())
+                    continue;
+
+                if (bot.getEnergy() < weakestEnergy) {
+                    weakestEnergy = bot.getEnergy();
+                    weakestEnemy = bot;
+                }
+            }
+        }
+
+        return weakestEnemy;
     }
 
     private RobotData[] Robots;
