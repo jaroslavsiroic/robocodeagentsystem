@@ -245,5 +245,7 @@ public class Scorch extends TeamRobot {
         Data.inEvent(e);
         Statistics.inEvent(e);
         Movement.inEvent(e);
+
+        //System.out.println(this.getName()+" recieved: "+e.getMessage());
     }
 }

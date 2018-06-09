@@ -1,5 +1,7 @@
 package kid.Managers;
 
+import kid.AlphaSquad.Messaging.CommandEvent;
+import kid.AlphaSquad.Messaging.CommandType;
 import kid.Colors;
 import kid.Communication.Data;
 import kid.Communication.Me;
@@ -330,13 +332,33 @@ public class DataManager {
                             TeammateBullets.add(vb[b]);
                 }
             }
-        } else if (e instanceof DeathEvent) {
+            /*
+            else if(ME.getMessage() instanceof EnemyData)
+            {
+                System.out.println("INNER-received from "+ME.getSender()+" msg instance: "+ME.getMessage().getClass().toString());
+
+                //EnemyData enemyData = (EnemyData) ME.getMessage();
+                //System.out.println("received from "+ME.getSender()+" : "+enemyData.getName()+", "+enemyData.getEnergy());
+
+            }
+            System.out.println("OUTER-received from "+ME.getSender()+" msg instance: "+ME.getMessage().getClass().toString());
+            */
+        }
+        else if(e instanceof CommandEvent)
+        {
+            CommandEvent cmd = (CommandEvent) e;
+
+            System.out.println("from "+cmd.getSender()+", "+cmd.getCommandType()+" : "
+                    +cmd.getEnemyData().getName()+", "+cmd.getEnemyData().getEnergy());
+        }
+        else if (e instanceof DeathEvent) {
             // DeathEvent DE = (DeathEvent) e;
             saveEnemyDataToFile();
         } else if (e instanceof WinEvent) {
             // WinEvent WE = (WinEvent) e;
             saveEnemyDataToFile();
         }
+        System.out.println("LOGGER-received "+e.getClass().toString());
     }
     /**
      * Sends all info to the other teammates.
@@ -346,6 +368,18 @@ public class DataManager {
             Data myinfo = new Data((TeamRobot) MyRobot, getEnemys(), getBullets());
             try {
                 ((TeamRobot) MyRobot).broadcastMessage(myinfo);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void broadcastCommandToTeammates(String sender, CommandType commandType, EnemyData targetEnemy)
+    {
+        if (MyRobot instanceof TeamRobot) {
+            CommandEvent command = new CommandEvent(sender, commandType, targetEnemy);
+            try {
+                ((TeamRobot) MyRobot).broadcastMessage(command);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

@@ -238,10 +238,34 @@ public class BossForWeakestStrategy extends TeamRobot implements WeakestEnemyStr
 
     @Override
     public void getEnemy(DataManager data) {
+        /*
         EnemyData weakestEnemy = data.getWeakestEnemey();
         System.out.println("Weakest enemy: "+weakestEnemy.getName()+" energy: "+weakestEnemy.getEnergy());
+        */
 
-        sendCommand(CommandType.attack, weakestEnemy);
+        Data.broadcastCommandToTeammates(this.getName(), CommandType.attack, data.getWeakestEnemey());
+
+        //broadcasting fails
+        /*MessageEvent msgToTeammates = new MessageEvent(this.getName(), weakestEnemy);
+        try {
+            this.broadcastMessage(msgToTeammates);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        //an example of using broadcasting from data manager
+        /*
+        if (MyRobot instanceof TeamRobot) {
+            kid.Communication.Data myinfo = new Data((TeamRobot) MyRobot, getEnemys(), getBullets());
+            try {
+                ((TeamRobot) MyRobot).broadcastMessage(myinfo);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        */
+
+        //sendCommand(CommandType.attack, weakestEnemy);
     }
 
     @Override
