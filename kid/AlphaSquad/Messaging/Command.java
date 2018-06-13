@@ -1,23 +1,20 @@
 package kid.AlphaSquad.Messaging;
 
 import kid.Data.Robot.EnemyData;
-import robocode.Event;
 
-public class CommandEvent extends Event {
+import java.io.Serializable;
 
-    private static final long serialVersionUID = 5131684452528873811L;
-
+public class Command implements Serializable {
     private String sender;
     private CommandType commandType;
     private EnemyData enemyData;
 
-    public CommandEvent(String sender, CommandType commandType, EnemyData enemyData)
+    public Command(String sender, CommandType commandType, EnemyData enemyData)
     {
         this.sender = sender;
         this.commandType = commandType;
         this.enemyData = enemyData;
     }
-
 
     public String getSender() {
         return sender;

@@ -1,6 +1,8 @@
 package kid.AlphaSquad.Messaging;
 
-public enum CommandType {
+import java.io.Serializable;
+
+public enum CommandType implements Serializable {
     attack,
     defend,
     holdPosition

@@ -4,7 +4,9 @@ import kid.*;
 import kid.Data.MyRobotsInfo;
 import kid.Data.Robot.Observation;
 
-public class GFBin extends Bin {
+import java.io.Serializable;
+
+public class GFBin extends Bin implements Serializable {
 
     public static final int binsToSide = 15;
     public static final int numBins = binsToSide * 2 + 1;

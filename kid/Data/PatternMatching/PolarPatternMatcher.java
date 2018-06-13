@@ -5,7 +5,9 @@ import kid.Data.Robot.*;
 import kid.Segmentation.*;
 import kid.Segmentation.Segmentars.*;
 
-public class PolarPatternMatcher {
+import java.io.Serializable;
+
+public class PolarPatternMatcher implements Serializable {
 
     private PolarPattern Head = null;
     private PolarPattern Foot = null;

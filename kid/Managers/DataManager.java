@@ -307,7 +307,14 @@ public class DataManager {
         } else if (e instanceof MessageEvent) {
             MessageEvent ME = (MessageEvent) e;
             if (ME.getMessage() instanceof Data) {
+                System.out.println("GOT SOME DATA");
                 Data Message = (Data) ME.getMessage();
+                System.out.println(Message.getCommandEvent());
+                if(Message.getCommandEvent() != null) {
+                    CommandEvent cmd = Message.getCommandEvent();
+                    System.out.println("from "+cmd.getSender()+", "+cmd.getCommandType()+" : "
+                            +cmd.getEnemyData().getName()+", "+cmd.getEnemyData().getEnergy());
+                }
                 int num = getTeammateNum(Message.getTeammate().getName());
                 if (num != RobotNotFound) {
                     TeammateData[num].updateItemFromTeammate(Message.getTeammate());
@@ -344,13 +351,6 @@ public class DataManager {
             System.out.println("OUTER-received from "+ME.getSender()+" msg instance: "+ME.getMessage().getClass().toString());
             */
         }
-        else if(e instanceof CommandEvent)
-        {
-            CommandEvent cmd = (CommandEvent) e;
-
-            System.out.println("from "+cmd.getSender()+", "+cmd.getCommandType()+" : "
-                    +cmd.getEnemyData().getName()+", "+cmd.getEnemyData().getEnergy());
-        }
         else if (e instanceof DeathEvent) {
             // DeathEvent DE = (DeathEvent) e;
             saveEnemyDataToFile();
@@ -374,12 +374,12 @@ public class DataManager {
         }
     }
 
-    public void broadcastCommandToTeammates(String sender, CommandType commandType, EnemyData targetEnemy)
-    {
+    public void broadcastCommandToTeammates(String sender, CommandType commandType, EnemyData targetEnemy) {
         if (MyRobot instanceof TeamRobot) {
             CommandEvent command = new CommandEvent(sender, commandType, targetEnemy);
+            Data data = new Data(command);
             try {
-                ((TeamRobot) MyRobot).broadcastMessage(command);
+                ((TeamRobot) MyRobot).broadcastMessage(data);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

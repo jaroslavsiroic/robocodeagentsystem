@@ -1,5 +1,6 @@
 package kid.AlphaSquad;
 
+import kid.AlphaSquad.Messaging.CommandEvent;
 import kid.AlphaSquad.Messaging.CommandType;
 import kid.AlphaSquad.Strategies.ClosestEnemyStrategy;
 import kid.Colors;
@@ -24,6 +25,8 @@ import kid.Targeting.Statistical.TidalWave;
 import kid.Utils;
 import robocode.*;
 
+import java.io.IOException;
+
 public class BossForClosestStrategy extends TeamRobot implements ClosestEnemyStrategy {
 
     DataManager Data = new DataManager(false);
@@ -44,7 +47,7 @@ public class BossForClosestStrategy extends TeamRobot implements ClosestEnemyStr
     boolean DO_DRAW_TARGETING = false;
     boolean DO_DRAW_MOVEMENT = false;
 
-    final static double maxFireDistance = 200.0;
+    final static double maxFireDistance = 205.0;
 
     public void run() {
 
@@ -163,7 +166,6 @@ public class BossForClosestStrategy extends TeamRobot implements ClosestEnemyStr
         Data.inEvent(e);
         Statistics.inEvent(e);
         Movement.inEvent(e);
-
         getEnemy(Data);
     }
 
@@ -246,10 +248,12 @@ public class BossForClosestStrategy extends TeamRobot implements ClosestEnemyStr
 
     @Override
     public void sendCommand(CommandType commandType, EnemyData enemyData) {
-        TeammateData[] teammates = Data.getTeammates();
-        for (TeammateData teammate:teammates)
-        {
-            System.out.println(teammate.getName()+" should "+commandType+" "+enemyData.getName());
-        }
+//        TeammateData[] teammates = Data.getTeammates();
+
+        Data.broadcastCommandToTeammates(getName(), commandType, enemyData);
+//        for (TeammateData teammate:teammates)
+//        {
+//            System.out.println(teammate.getName()+" should "+commandType+" "+enemyData.getName());
+//        }
     }
 }
